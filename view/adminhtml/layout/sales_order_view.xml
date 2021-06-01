@@ -9,7 +9,7 @@
     <body>
         <referenceContainer name="content">
             <!-- new xml content goes here -->
-            <block name="bluebird.order.export" template="Bluebird_OrderExport::export.phtml">
+            <block name="bluebird.order.export" template="Bluebird_OrderExport::export.phtml" ifconfig="sales/order_export/enabled">
                 <arguments>
                     <argument name="details" xsi:type="object">Bluebird\OrderExport\ViewModal\OrderDetails</argument>
                 </arguments>
