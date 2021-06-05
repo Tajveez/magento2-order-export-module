@@ -7,6 +7,10 @@ class HeaderData {
     Class to contain data, take information 
     and make it available to other classes
     that are going to process that data.
+
+    [HTTP Request] -> [      Controller       ]
+                    \                      \
+                    [Build HeaderData]  -> [Call Orchestrator] -> [Return Results]
     */
 
     /* @var \DateTime */    
