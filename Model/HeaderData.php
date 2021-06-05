@@ -3,6 +3,12 @@
 namespace Bluebir\OrderExport\Model;
 
 class HeaderData {
+    /* 
+    Class to contain data, take information 
+    and make it available to other classes
+    that are going to process that data.
+    */
+
     /* @var \DateTime */    
     private $shipDate;
     /* @var string */
