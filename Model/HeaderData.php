@@ -1,6 +1,6 @@
 <?php
 
-namespace Bluebir\OrderExport\Model;
+namespace Bluebird\OrderExport\Model;
 
 class HeaderData {
     /* 

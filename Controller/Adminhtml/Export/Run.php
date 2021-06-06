@@ -14,7 +14,7 @@ class Run extends Action implements HttpPostActionInterface {
     private $headerDataFactory;
 
     public function __construct(JsonFactory $jsonFactory, Context $context, HeaderDataFactory $headerDataFactory) {
-        parent::__construct($context)
+        parent::__construct($context);
         $this->jsonFactory = $jsonFactory;
         $this->headerDataFactory = $headerDataFactory;
     }
