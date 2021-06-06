@@ -57,4 +57,9 @@ class OrderDetails implements ArgumentInterface {
             )
         ];
     }
+
+    public function hasBeenExported(): bool
+    {
+        return false;
+    }
 }

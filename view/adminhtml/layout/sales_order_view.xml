@@ -14,7 +14,11 @@
                     <argument name="details" xsi:type="object">Bluebird\OrderExport\ViewModal\OrderDetails</argument>
                 </arguments>
             </block>
-            <block name="bluebird.order.status" template="Bluebird_OrderExport::status.phtml" after="bluebird.order.export" />
+            <block name="bluebird.order.status" template="Bluebird_OrderExport::status.phtml" after="bluebird.order.export" ifconfig="sales/order_export/enabled">
+                <arguments>
+                    <argument name="details" xsi:type="object">Bluebird\OrderExport\ViewModal\OrderDetails</argument>
+                </arguments>
+            </block>
 
         </referenceContainer>
     </body>

@@ -35,7 +35,7 @@ class HeaderData {
 
     public function setMerchantNotes($merchantNotes): void
     {
-        return $this->merchantNotes = $merchantNotes;
+        $this->merchantNotes = $merchantNotes;
     }
 
 }
