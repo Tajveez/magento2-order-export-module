@@ -4,7 +4,7 @@
         <arguments>
             <argument name="dataCollectors" xsi:type="array">
                 <item name="headerData" xsi:type="object">
-                    
+                    Bluebird\OrderExport\Collector\HeaderData
                 </item>
             </argument>
         </arguments>
