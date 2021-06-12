@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Bluebird\OrderExport\Action\TransformOrderToArray">
+        <arguments>
+            <argument name="dataCollectors" xsi:type="array">
+                <item name="headerData" xsi:type="object">
+                    Bluebird\OrderExport\Collector\HeaderData
+                </item>
+                <item name="itemData" xsi:type="object">
+                    Bluebird\OrderExport\Collector\ItemData
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Bluebird\OrderExport\Collector\ItemData">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="simple" xsi:type="const">
+                    Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
+                </item>
+                <item name="virtual" xsi:type="const">
+                    Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>
