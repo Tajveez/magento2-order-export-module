@@ -9,7 +9,8 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
 
-class OrderDetails implements ArgumentInterface {
+class OrderDetails implements ArgumentInterface
+{
 
     private $scopeConfig;
     private $formKey;
@@ -23,8 +24,7 @@ class OrderDetails implements ArgumentInterface {
         UrlInterface $urlBuilder,
         RequestInterface $request,
         AuthorizationInterface $authorization
-    )
-    {
+    ) {
         $this->scopeConfig = $scopeConfig;
         $this->formKey = $formKey;
         $this->urlBuilder = $urlBuilder;
@@ -35,7 +35,7 @@ class OrderDetails implements ArgumentInterface {
     public function isAllowed(): bool
     {
         return $this->scopeConfig->isSetFlag('sales/order_export/enabled')
-                && $this->authorization->isAllowed('Bluebird_OrderExport::OrderExport');
+            && $this->authorization->isAllowed('Bluebird_OrderExport::OrderExport');
     }
 
     public function getButtonMessage()

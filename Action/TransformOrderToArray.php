@@ -1,21 +1,29 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Bluebird\OrderExport\Action;
+
 use Bluebird\OrderExport\Model\HeaderData;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Bluebird\OrderExport\Api\DataCollectorInterface;
 
-class TransformOrderToArray {
+class TransformOrderToArray
+{
 	private $orderRepository;
 	private $dataCollectors;
-	public function __construct(OrderRepositoryInterface $orderRepository,
-		array $dataCollectors) {
+	public function __construct(
+		OrderRepositoryInterface $orderRepository,
+		array $dataCollectors
+	) {
 		$this->orderRepository = $orderRepository;
 		$this->dataCollectors = $dataCollectors;
 	}
 
-	public function execute(int $orderId,
-		HeaderData $headerData) {
+	public function execute(
+		int $orderId,
+		HeaderData $headerData
+	) {
 		$order = $this->orderRepository->get($orderId);
 		$output = [];
 

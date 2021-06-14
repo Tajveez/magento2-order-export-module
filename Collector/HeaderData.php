@@ -1,6 +1,7 @@
 <?php
 
 namespace Bluebird\OrderExport\Collector;
+
 use Bluebird\OrderExport\Api\DataCollectorInterface;
 use Bluebird\OrderExport\Model\HeaderData as HeaderDataModel;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
@@ -10,7 +11,8 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderAddressRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 
-class HeaderData implements DataCollectorInterface {
+class HeaderData implements DataCollectorInterface
+{
 	private $scopeConfig;
 	private $addressRepository;
 	private $criteriaBuilderFactory;
@@ -25,7 +27,7 @@ class HeaderData implements DataCollectorInterface {
 		$this->addressRepository = $addressRepository;
 	}
 
-	public function collect(OrderInterface $order, HeaderDataModel $headerDataModel): array
+	public function collect(OrderInterface $order, HeaderDataModel $headerData): array
 	{
 		/** @var OrderAddressInterface $shippingAddress */
 		$shippingAddress = $this->getShippingAddressFor($order);
@@ -65,7 +67,8 @@ class HeaderData implements DataCollectorInterface {
 	 * @param OrderInterface $order
 	 * @return OrderAddressInterface
 	 */
-	private function getShippingAddressFor(OrderInterface $order) {
+	private function getShippingAddressFor(OrderInterface $order)
+	{
 		$searchCriteriaBuilder = $this->criteriaBuilderFactory->create();
 		$searchCriteria = $searchCriteriaBuilder
 			->addFilter('parent_id', $order->getEntityId())

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,8 +12,8 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
-* Patch is mechanism, that allows to do atomic upgrade data changes
-*/
+ * Patch is mechanism, that allows to do atomic upgrade data changes
+ */
 class CreateSkuOverrideAttribute implements DataPatchInterface
 {
     /**
@@ -65,8 +66,6 @@ class CreateSkuOverrideAttribute implements DataPatchInterface
      */
     public static function getDependencies()
     {
-        return [
-
-        ];
+        return [];
     }
 }
