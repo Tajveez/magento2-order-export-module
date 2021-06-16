@@ -2,206 +2,139 @@
 
 namespace Bluebird\OrderExport\Model;
 
-use Magento\Cms\Api\BlockRepositoryInterface;
-use Magento\Cms\Api\Data;
-use Magento\Cms\Model\ResourceModel\Block as ResourceBlock;
-use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Store\Model\StoreManagerInterface;
+use Bluebird\OrderExport\Api\Data;
+use Bluebird\OrderExport\Model\ResourceModel\OrderExportDetails as OrderExportDetailsModel;
+use Bluebird\OrderExport\Model\ResourceModel\OrderExportDetails\CollectionFactory as OrderExportDetailsCollectionFactory;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
-/**
- * Class BlockRepository
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-class OrderExportDetailsRepository implements BlockRepositoryInterface
+class OrderExportDetailsRepository implements \Bluebird\OrderExport\Api\OrderExportDetailsRepositoryInterface
 {
-    /**
-     * @var ResourceBlock
-     */
-    protected $resource;
-
-    /**
-     * @var BlockFactory
-     */
-    protected $blockFactory;
-
-    /**
-     * @var BlockCollectionFactory
-     */
-    protected $blockCollectionFactory;
-
-    /**
-     * @var Data\BlockSearchResultsInterfaceFactory
-     */
-    protected $searchResultsFactory;
-
-    /**
-     * @var DataObjectHelper
-     */
-    protected $dataObjectHelper;
-
-    /**
-     * @var DataObjectProcessor
-     */
-    protected $dataObjectProcessor;
-
-    /**
-     * @var \Magento\Cms\Api\Data\BlockInterfaceFactory
-     */
-    protected $dataBlockFactory;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var CollectionProcessorInterface
-     */
+    private $resource;
+    private $orderExportDetailsFactory;
+    private $orderExportDetailsCollectionFactory;
+    private $searchResultsFactory;
     private $collectionProcessor;
 
-    /**
-     * @param ResourceBlock $resource
-     * @param BlockFactory $blockFactory
-     * @param Data\BlockInterfaceFactory $dataBlockFactory
-     * @param BlockCollectionFactory $blockCollectionFactory
-     * @param Data\BlockSearchResultsInterfaceFactory $searchResultsFactory
-     * @param DataObjectHelper $dataObjectHelper
-     * @param DataObjectProcessor $dataObjectProcessor
-     * @param StoreManagerInterface $storeManager
-     * @param CollectionProcessorInterface $collectionProcessor
-     */
     public function __construct(
-        ResourceBlock $resource,
-        BlockFactory $blockFactory,
-        \Magento\Cms\Api\Data\BlockInterfaceFactory $dataBlockFactory,
-        BlockCollectionFactory $blockCollectionFactory,
-        Data\BlockSearchResultsInterfaceFactory $searchResultsFactory,
-        DataObjectHelper $dataObjectHelper,
-        DataObjectProcessor $dataObjectProcessor,
-        StoreManagerInterface $storeManager,
+        OrderExportDetailsModel $resource,
+        OrderExportDetailsFactory $orderExportDetailsFactory,
+        OrderExportDetailsCollectionFactory $orderExportDetailsCollectionFactory,
+        Data\OrderExportDetailsSearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->resource = $resource;
-        $this->blockFactory = $blockFactory;
-        $this->blockCollectionFactory = $blockCollectionFactory;
+        $this->orderExportDetailsFactory = $orderExportDetailsFactory;
+        $this->orderExportDetailsCollectionFactory = $orderExportDetailsCollectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
-        $this->dataObjectHelper = $dataObjectHelper;
-        $this->dataBlockFactory = $dataBlockFactory;
-        $this->dataObjectProcessor = $dataObjectProcessor;
-        $this->storeManager = $storeManager;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
-     * Save Block data
+     * Save order export details.
      *
-     * @param \Magento\Cms\Api\Data\BlockInterface $block
-     * @return Block
-     * @throws CouldNotSaveException
+     * @param \Bluebird\OrderExport\Api\Data\OrderExportDetailsInterface $details
+     * @return \Bluebird\OrderExport\Api\Data\OrderExportDetailsInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function save(Data\BlockInterface $block)
+    public function save(Data\OrderExportDetailsInterface $details)
     {
-        if (empty($block->getStoreId())) {
-            $block->setStoreId($this->storeManager->getStore()->getId());
-        }
-
         try {
-            $this->resource->save($block);
+            $this->resource->save($details);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__($exception->getMessage()));
         }
-        return $block;
+
+        return $details;
     }
 
     /**
-     * Load Block data by given Block Identity
+     * Retrieve order export details.
      *
-     * @param string $blockId
-     * @return Block
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param int $id
+     * @return \Bluebird\OrderExport\Api\Data\OrderExportDetailsInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getById($blockId)
+    public function getById($id)
     {
-        $block = $this->blockFactory->create();
-        $this->resource->load($block, $blockId);
-        if (!$block->getId()) {
-            throw new NoSuchEntityException(__('The CMS block with the "%1" ID doesn\'t exist.', $blockId));
+        $details = $this->orderExportDetailsFactory->create();
+        $this->resource->load($details, $id);
+        if (!$details->getId()) {
+            throw new NoSuchEntityException(__('The order export details with the "%1" ID doesn\'t exist', $id));
         }
-        return $block;
+
+        return $details;
     }
 
     /**
-     * Load Block data collection by given search criteria
+     * Retrieve order export details matching the specified criteria.
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
-     * @return \Magento\Cms\Api\Data\BlockSearchResultsInterface
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Bluebird\OrderExport\Api\Data\OrderExportDetailsSearchResultsInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Magento\Cms\Model\ResourceModel\Block\Collection $collection */
-        $collection = $this->blockCollectionFactory->create();
+        /** @var \Bluebird\OrderExport\Model\ResourceModel\OrderExportDetails\Collection $collection */
+        $collection = $this->orderExportDetailsCollectionFactory->create();
 
-        $this->collectionProcessor->process($criteria, $collection);
+        $this->collectionProcessor->process($searchCriteria, $collection);
 
-        /** @var Data\BlockSearchResultsInterface $searchResults */
+        /** @var Data\OrderExportDetailsSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
-        $searchResults->setSearchCriteria($criteria);
+        $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
+
         return $searchResults;
     }
 
     /**
-     * Delete Block
+     * Delete order export details.
      *
-     * @param \Magento\Cms\Api\Data\BlockInterface $block
-     * @return bool
-     * @throws CouldNotDeleteException
+     * @param \Bluebird\OrderExport\Api\Data\OrderExportDetailsInterface $details
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function delete(Data\BlockInterface $block)
+    public function delete(Data\OrderExportDetailsInterface $details)
     {
         try {
-            $this->resource->delete($block);
+            $this->resource->delete($details);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(__($exception->getMessage()));
         }
+
         return true;
     }
 
     /**
-     * Delete Block by given Block Identity
+     * Delete order export details by ID.
      *
-     * @param string $blockId
-     * @return bool
-     * @throws CouldNotDeleteException
-     * @throws NoSuchEntityException
+     * @param int $id
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteById($blockId)
+    public function deleteById($id)
     {
-        return $this->delete($this->getById($blockId));
+        return $this->delete($this->getById($id));
     }
 
     /**
      * Retrieve collection processor
      *
-     * @deprecated 102.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor'
+                'Bluebird\OrderExport\Model\Api\SearchCriteria\BlockCollectionProcessor'
             );
         }
+
         return $this->collectionProcessor;
     }
 }

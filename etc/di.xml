@@ -25,4 +25,10 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Bluebird\OrderExport\Model\OrderExportDetailsRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Bluebird\OrderExport\Model\Api\SearchCriteria\OrderExportDetailsCollectionProcessor</argument>
+        </arguments>
+    </type>
 </config>
