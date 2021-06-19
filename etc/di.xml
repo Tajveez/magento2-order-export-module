@@ -40,4 +40,8 @@
             <argument name="collectionProcessor" xsi:type="object">Bluebird\OrderExport\Model\Api\SearchCriteria\OrderExportDetailsCollectionProcessor</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Sales\Api\OrderRepositoryInterface">
+        <plugin name="LoadExportDetailsIntoOrder" type="Bluebird\OrderExport\Plugin\LoadExportDetailsIntoOrder" />
+    </type>
 </config>
