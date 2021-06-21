@@ -11,12 +11,12 @@
             <!-- new xml content goes here -->
             <block name="bluebird.order.export" template="Bluebird_OrderExport::export.phtml" ifconfig="sales/order_export/enabled">
                 <arguments>
-                    <argument name="details" xsi:type="object">Bluebird\OrderExport\ViewModal\OrderDetails</argument>
+                    <argument name="details" xsi:type="object">Bluebird\OrderExport\ViewModel\OrderDetails</argument>
                 </arguments>
             </block>
             <block name="bluebird.order.status" template="Bluebird_OrderExport::status.phtml" after="bluebird.order.export" ifconfig="sales/order_export/enabled">
                 <arguments>
-                    <argument name="details" xsi:type="object">Bluebird\OrderExport\ViewModal\OrderDetails</argument>
+                    <argument name="details" xsi:type="object">Bluebird\OrderExport\ViewModel\HasBeenExported</argument>
                 </arguments>
             </block>
 

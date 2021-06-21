@@ -1,6 +1,6 @@
 <?php
 
-namespace Bluebird\OrderExport\ViewModal;
+namespace Bluebird\OrderExport\ViewModel;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
